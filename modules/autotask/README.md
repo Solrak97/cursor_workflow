@@ -12,8 +12,9 @@ Integrates AutoTask MCP bridge for task management in Cursor projects.
 ## Requirements
 
 - AutoTask API running (default: `http://localhost:8000`)
-- Bridge directory in project root at `bridge/`
 - Python 3.11+ with `uv` package manager
+
+The bridge is automatically installed to `.cursor/bridges/autotask` during module installation.
 
 ## MCP Tools
 
@@ -32,7 +33,7 @@ This module provides the following MCP tools:
 ## Configuration
 
 The MCP configuration assumes:
-- Bridge is located at `bridge/` relative to project root
+- Bridge is located at `.cursor/bridges/autotask` (installed automatically)
 - AutoTask API is at `http://localhost:8000`
 
 To customize, edit `.cursor/mcp.json` after installation.
