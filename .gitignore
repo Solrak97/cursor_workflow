@@ -24,5 +24,7 @@ uv.lock
 Thumbs.db
 
 # Project specific
-.cursor/
+.cursor/*
+!.cursor/skills/
+!.cursor/skills/**/*
 *.log

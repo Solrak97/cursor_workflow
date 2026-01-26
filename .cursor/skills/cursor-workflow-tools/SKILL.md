@@ -1,0 +1,107 @@
+---
+name: cursor-workflow-tools
+description: Use MCP tools and workflows from the cursor_workflow system for task management, git operations, and automated workflows. Use when working with AutoTask tasks, git operations, or when the user mentions task management, commits, or automated workflows.
+---
+
+# Cursor Workflow Tools
+
+This skill enables you to use the MCP tools and workflows provided by the cursor_workflow system installed in this project.
+
+## Quick Reference
+
+The cursor_workflow system provides modular MCP tools accessible through Cursor. Check `.cursor/mcp.json` to see which servers are configured.
+
+## Available MCP Tools
+
+### AutoTask Tools (if autotask module installed)
+
+- **create_task**: Create new tasks
+  - Parameters: `title` (required), `description`, `kind` (task/feature/epic), `status`, `points`
+- **get_task**: Get task by ID
+- **list_tasks**: List tasks with filters (status, kind, project_id, sprint_id, dates)
+- **update_task**: Update task properties
+- **delete_task**: Delete a task
+- **list_task_notes**: View task notes
+- **create_task_note**: Add a note to a task
+- **list_sprints**: List sprints
+- **get_sprint**: Get sprint details
+
+### Git Tools (if git module installed)
+
+- **git_status**: Check repository status
+- **git_diff**: View changes (staged/unstaged/commit)
+- **git_commit**: Create commits (auto-stages by default)
+- **git_log**: View commit history
+- **git_branch**: List branches or get current branch
+
+## Common Workflows
+
+### Task Management Workflow
+
+1. **Create Task**: Use `create_task` with title and description
+2. **Start Work**: Update task status to `in_progress` with `update_task`
+3. **Add Notes**: Use `create_task_note` to document progress
+4. **Complete**: Update status to `closed` - this triggers auto-commit if git module is installed
+
+### Git Workflow
+
+1. **Check Status**: Use `git_status` to see changes
+2. **Review Changes**: Use `git_diff` to see what changed
+3. **Commit**: Use `git_commit` with descriptive message
+4. **View History**: Use `git_log` to see recent commits
+
+### Auto-Commit on Task Close
+
+When you close a task (status → `closed`):
+- System automatically checks for changes
+- Stages all changes
+- Creates commit with message: `feat: [Task Title] - [Description]`
+
+## Usage Examples
+
+**Create and manage tasks**:
+- "Create a task for implementing user authentication"
+- "List all open tasks"
+- "Update task [id] to in_progress"
+- "Close task [id]" (auto-commits if changes exist)
+
+**Git operations**:
+- "Check git status"
+- "Show me the diff"
+- "Commit with message 'feat: add login form'"
+- "Show last 5 commits"
+
+**Combined**:
+- "Complete task [id]" → Closes task and commits changes
+- "Start working on task [id]" → Sets to in_progress
+
+## When to Use
+
+Use these tools when:
+- Managing tasks in AutoTask
+- Creating git commits
+- Automating workflows between task management and version control
+- Need to check repository status or view changes
+- Want to automate commit creation when completing work
+
+## Prerequisites
+
+- Modules must be installed via `./setup.sh` or `./install.sh [modules]`
+- AutoTask module requires: AutoTask API running, bridge directory
+- Git module requires: Git installed, Python 3.11+ with uv
+
+## Configuration
+
+- MCP servers configured in: `.cursor/mcp.json`
+- Rules and workflows in: `.cursor/rules/`
+- Module documentation in: `modules/*/README.md`
+
+## Troubleshooting
+
+If tools aren't available:
+1. Check `.cursor/mcp.json` exists and is valid
+2. Verify MCP server paths are correct
+3. Ensure dependencies installed: `cd modules/[module] && uv sync`
+4. Restart Cursor after installation
+
+For module-specific issues, see `modules/[module]/README.md`.
