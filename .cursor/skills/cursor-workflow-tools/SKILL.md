@@ -34,7 +34,27 @@ The cursor_workflow system provides modular MCP tools accessible through Cursor.
 - **git_log**: View commit history
 - **git_branch**: List branches or get current branch
 
+## AutoTask Plugin (if autotask-plugin module installed)
+
+The AutoTask plugin provides enhanced workflows for building features:
+
+- **Start Building Features**: Use the `start-building-features` command to:
+  1. Check connectivity to AutoTask server via MCP bridge
+  2. List available open tasks
+  3. Select highest priority unblocked task
+  4. Begin implementation by updating task to `in_progress`
+
+The plugin includes connectivity checking and automatic task selection based on priority and dependencies.
+
 ## Common Workflows
+
+### Start Building Features Workflow
+
+1. **Check Connectivity**: Verify AutoTask server is reachable via MCP bridge
+2. **List Tasks**: Get all open, unblocked tasks
+3. **Select Task**: Choose highest priority task with no unclosed dependencies
+4. **Begin Work**: Update task status to `in_progress` and start implementation
+5. **Complete**: Update status to `closed` - triggers auto-commit if git module is installed
 
 ### Task Management Workflow
 
@@ -74,6 +94,7 @@ When you close a task (status → `closed`):
 **Combined**:
 - "Complete task [id]" → Closes task and commits changes
 - "Start working on task [id]" → Sets to in_progress
+- "Start building features" → Checks connectivity, selects task, begins work
 
 ## When to Use
 
@@ -88,6 +109,7 @@ Use these tools when:
 
 - Modules must be installed via `./setup.sh` or `./install.sh [modules]`
 - AutoTask module requires: AutoTask API running, bridge directory
+- AutoTask plugin requires: AutoTask module installed, MCP bridge configured
 - Git module requires: Git installed, Python 3.11+ with uv
 
 ## Configuration

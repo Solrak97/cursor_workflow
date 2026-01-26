@@ -28,6 +28,7 @@ The setup script will:
 
 - **autotask**: AutoTask MCP bridge integration for task management
 - **git**: Git MCP server for automated version control operations
+- **autotask-plugin**: AutoTask plugin with connectivity checking and "start building features" workflow
 
 ### 📦 Adding New Modules
 
@@ -63,7 +64,7 @@ cd .cursor/cursor_workflow
 
 ```bash
 # Install only specific modules
-./install.sh autotask git
+./install.sh autotask git autotask-plugin
 
 # Install all modules
 ./install.sh --all
@@ -99,6 +100,21 @@ Provides Git operations via MCP for automated version control.
 - Git installed and configured
 - Python 3.11+ with `uv`
 
+### AutoTask Plugin Module
+
+Provides AutoTask integration with connectivity checking and feature building workflows.
+
+**Features:**
+- Connectivity verification to AutoTask server
+- "Start building features" command workflow
+- Task selection and management
+- Integration with AutoTask MCP bridge
+
+**Requirements:**
+- AutoTask API running (default: `http://localhost:8000`)
+- Bridge directory in project root
+- AutoTask MCP bridge configured
+
 ## Project Structure
 
 ```
@@ -123,6 +139,10 @@ cursor_workflow/
 │   │   ├── rules/
 │   │   │   └── git-workflow.mdc
 │   │   └── README.md
+│   ├── autotask-plugin/
+│   │   ├── rules/
+│   │   │   └── autotask-plugin-usage.mdc
+│   │   └── README.md
 │   └── .template/
 │       └── README.md          # Template for new modules
 ├── rules/
@@ -142,15 +162,20 @@ Once installed, you can use the MCP tools directly:
 - **Git Operations**: "Check git status", "Commit with message '...'", "Show diff"
 - **Combined**: "Complete task [id]" → Closes task and auto-commits
 
-### Cursor Skill
+### Cursor Skills
 
-The system includes a Cursor skill at `.cursor/skills/cursor-workflow-tools/SKILL.md` that:
-- Documents all available MCP tools
-- Provides usage examples and workflows
-- Guides the AI on when and how to use the tools
-- Includes troubleshooting information
+The system includes Cursor skills that are automatically copied to `.cursor/skills/` during installation:
 
-The skill is automatically available once installed and helps Cursor understand what tools are available and how to use them.
+- **cursor-workflow-tools**: Documents all available MCP tools, provides usage examples and workflows, guides the AI on when and how to use the tools
+- **cursor-workflow-installation**: Complete guide for installing and setting up cursor_workflow in a Cursor project
+- **autotask-installation**: Guide for setting up AutoTask from scratch (if autotask-installation skill is included)
+
+Skills are automatically available once installed and help Cursor understand what tools are available and how to use them.
+
+**Installation Command**: Use the `cursor-workflow-installation` skill or run:
+```bash
+cd .cursor/cursor_workflow && ./setup.sh
+```
 
 ## Creating a New Module
 

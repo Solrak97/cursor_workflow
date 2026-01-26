@@ -20,6 +20,7 @@ fi
 # Create necessary directories
 mkdir -p "$PROJECT_ROOT/.cursor/rules"
 mkdir -p "$PROJECT_ROOT/.cursor/mcp"
+mkdir -p "$PROJECT_ROOT/.cursor/skills"
 
 # Determine which modules to install
 if [ "$1" == "--all" ] || [ $# -eq 0 ]; then
@@ -101,6 +102,19 @@ echo ""
 echo "📋 Copying cross-module rules..."
 if [ -d "$SCRIPT_DIR/rules" ]; then
     cp -r "$SCRIPT_DIR/rules/"* "$PROJECT_ROOT/.cursor/rules/" 2>/dev/null || true
+fi
+
+# Copy skills to main project
+echo ""
+echo "📚 Copying skills..."
+if [ -d "$SCRIPT_DIR/.cursor/skills" ]; then
+    for SKILL_DIR in "$SCRIPT_DIR/.cursor/skills"/*; do
+        if [ -d "$SKILL_DIR" ]; then
+            SKILL_NAME=$(basename "$SKILL_DIR")
+            echo "   📖 Copying skill: $SKILL_NAME"
+            cp -r "$SKILL_DIR" "$PROJECT_ROOT/.cursor/skills/" 2>/dev/null || true
+        fi
+    done
 fi
 
 echo ""
