@@ -39,8 +39,11 @@ Run the following as a short, conversational question flow. Ask one or two quest
 ## After the flow
 
 1. **Summarize** the answers in 2–4 sentences (the "brief").
-2. **Offer to save** the brief to a file (e.g. `PROJECT_BRIEF.md` or `docs/kickoff.md`) so future conversations can use it.
-3. **Propose next step**: one concrete first task (e.g. "Set up the app shell", "Add the data model", "Create the main screen") and ask if they want to do that now.
+2. **If AutoTask is available**: Create a project container in AutoTask and use it in the project definition:
+   - Call `create_task` with `kind: "epic"`, title = the project name (what we're building), description = the one-sentence brief (or 2–4 sentence summary). This epic represents the project.
+   - Store the returned task ID in the brief (see template below) as **AutoTask epic ID** so future work can be associated with this project.
+3. **Offer to save** the brief to a file (e.g. `PROJECT_BRIEF.md` or `docs/kickoff.md`) so future conversations can use it. Include the AutoTask epic ID if you created one.
+4. **Propose next step**: one concrete first task (e.g. "Set up the app shell", "Add the data model", "Create the main screen") and ask if they want to do that now.
 
 ## Tone
 
@@ -60,6 +63,7 @@ If the user agrees to save a brief, create or update a file with:
 **Tech / constraints:** [stack, must-use, must-avoid]
 **Scope this session:** [MVP / full feature / spike]
 **Success for today:** [optional]
+**AutoTask epic ID:** [uuid if AutoTask was used; use for linking stories to this project]
 
 ---
 *Last updated: [date]. From project-startup skill.*
