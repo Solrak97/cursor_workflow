@@ -169,6 +169,8 @@ The system includes Cursor skills that are automatically copied to `.cursor/skil
 - **cursor-workflow-tools**: Documents all available MCP tools, provides usage examples and workflows, guides the AI on when and how to use the tools
 - **cursor-workflow-installation**: Complete guide for installing and setting up cursor_workflow in a Cursor project
 - **autotask-installation**: Guide for setting up AutoTask from scratch (if autotask-installation skill is included)
+- **project-startup**: Project kickoff flow—asks what to build, how to build it, tech and scope; use on open or "what should we build"
+- **git-setup**: One-time git account setup (user.name, user.email); includes commit script for commits with messages when not using Git MCP
 
 Skills are automatically available once installed and help Cursor understand what tools are available and how to use them.
 

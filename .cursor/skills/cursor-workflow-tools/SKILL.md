@@ -34,6 +34,11 @@ The cursor_workflow system provides modular MCP tools accessible through Cursor.
 - **git_log**: View commit history
 - **git_branch**: List branches or get current branch
 
+### Git Setup (skill: git-setup)
+
+- **One-time account setup**: When the user asks to set up git or when `user.name`/`user.email` are unset, use the **git-setup** skill to ask for name and email, then run `git config [--global] user.name` and `git config [--global] user.email`.
+- **Commits**: Prefer the **git_commit** MCP tool. If not using MCP, run the commit script from repo root: `bash .cursor/skills/git-setup/scripts/commit.sh "message"` (or from submodule path `.cursor/cursor_workflow/.cursor/skills/git-setup/scripts/commit.sh`).
+
 ## AutoTask Plugin (if autotask-plugin module installed)
 
 The AutoTask plugin provides enhanced workflows for building features:
@@ -65,10 +70,11 @@ The plugin includes connectivity checking and automatic task selection based on 
 
 ### Git Workflow
 
-1. **Check Status**: Use `git_status` to see changes
-2. **Review Changes**: Use `git_diff` to see what changed
-3. **Commit**: Use `git_commit` with descriptive message
-4. **View History**: Use `git_log` to see recent commits
+1. **Ensure identity set**: If first time or user asked to set up git, run **git-setup** skill (ask name, email, repo vs global; then `git config`).
+2. **Check Status**: Use `git_status` to see changes
+3. **Review Changes**: Use `git_diff` to see what changed
+4. **Commit**: Use `git_commit` with descriptive message, or run `scripts/commit.sh "message"` from repo root
+5. **View History**: Use `git_log` to see recent commits
 
 ### Auto-Commit on Task Close
 
@@ -85,10 +91,11 @@ When you close a task (status → `closed`):
 - "Update task [id] to in_progress"
 - "Close task [id]" (auto-commits if changes exist)
 
-**Git operations**:
+**Git setup and operations**:
+- "Set up my git account" / "Configure git" → use git-setup skill (name, email, scope)
 - "Check git status"
 - "Show me the diff"
-- "Commit with message 'feat: add login form'"
+- "Commit with message 'feat: add login form'" (use git_commit or commit script)
 - "Show last 5 commits"
 
 **Combined**:
