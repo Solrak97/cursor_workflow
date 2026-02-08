@@ -73,8 +73,9 @@ class FastAPIClient:
         kind: Optional[str] = None,
         status: str = "open",
         points: Optional[int] = None,
+        project_id: Optional[str] = None,
     ) -> Dict[str, Any]:
-        """Create a new task. kind: task, feature, or epic (default task)."""
+        """Create a new task. kind: task, feature, or epic (default task). Optionally set project_id."""
         data: Dict[str, Any] = {"title": title, "status": status}
         if description:
             data["description"] = description
@@ -82,7 +83,34 @@ class FastAPIClient:
             data["kind"] = kind
         if points is not None:
             data["points"] = points
+        if project_id:
+            data["project_id"] = project_id
         response = await self.client.post("/api/tasks", json=data)
+        response.raise_for_status()
+        return response.json()
+
+    async def list_projects(self) -> list[Dict[str, Any]]:
+        """List all projects."""
+        response = await self.client.get("/api/projects")
+        response.raise_for_status()
+        return response.json()
+
+    async def get_project(self, project_id: str) -> Dict[str, Any]:
+        """Get a project by ID."""
+        response = await self.client.get(f"/api/projects/{project_id}")
+        response.raise_for_status()
+        return response.json()
+
+    async def create_project(
+        self,
+        name: str,
+        description: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Create a new project."""
+        data: Dict[str, Any] = {"name": name}
+        if description is not None:
+            data["description"] = description
+        response = await self.client.post("/api/projects", json=data)
         response.raise_for_status()
         return response.json()
 

@@ -9,19 +9,39 @@ def get_tools() -> list[Tool]:
     """Return list of available MCP tools"""
     return [
         Tool(
-            name="create_task",
-            description="Create a new task with title, description, kind (task/feature/epic), status, and optional points",
+            name="create_project",
+            description="Create a new project. Use this to set up a project before creating tasks.",
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "title": {
-                        "type": "string",
-                        "description": "Task title (required)"
-                    },
-                    "description": {
-                        "type": "string",
-                        "description": "Task description (optional)"
-                    },
+                    "name": {"type": "string", "description": "Project name (required)"},
+                    "description": {"type": "string", "description": "Project description (optional)"}
+                },
+                "required": ["name"]
+            }
+        ),
+        Tool(
+            name="list_projects",
+            description="List all projects",
+            inputSchema={"type": "object", "properties": {}}
+        ),
+        Tool(
+            name="get_project",
+            description="Get a project by its ID",
+            inputSchema={
+                "type": "object",
+                "properties": {"id": {"type": "string", "description": "Project UUID"}},
+                "required": ["id"]
+            }
+        ),
+        Tool(
+            name="create_task",
+            description="Create a new task with title, description, kind (task/feature/epic), status, optional points, and optional project_id",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "title": {"type": "string", "description": "Task title (required)"},
+                    "description": {"type": "string", "description": "Task description (optional)"},
                     "kind": {
                         "type": "string",
                         "enum": ["task", "feature", "epic"],
@@ -34,10 +54,8 @@ def get_tools() -> list[Tool]:
                         "description": "Task status (default: open)",
                         "default": "open"
                     },
-                    "points": {
-                        "type": "integer",
-                        "description": "Optional story points or estimate (non-negative integer)"
-                    }
+                    "points": {"type": "integer", "description": "Optional story points (non-negative integer)"},
+                    "project_id": {"type": "string", "description": "Project UUID to assign the task to (optional)"}
                 },
                 "required": ["title"]
             }
@@ -217,13 +235,26 @@ def get_tools() -> list[Tool]:
 async def handle_tool_call(tool_name: str, arguments: Dict[str, Any]) -> list[TextContent]:
     """Handle tool execution and return results"""
     try:
+        if tool_name == "create_project":
+            result = await client.create_project(
+                name=arguments["name"],
+                description=arguments.get("description"),
+            )
+            return [TextContent(type="text", text=f"Project created successfully: {result}")]
+        if tool_name == "list_projects":
+            result = await client.list_projects()
+            return [TextContent(type="text", text=f"Projects: {result}")]
+        if tool_name == "get_project":
+            result = await client.get_project(arguments["id"])
+            return [TextContent(type="text", text=f"Project: {result}")]
         if tool_name == "create_task":
             result = await client.create_task(
                 title=arguments["title"],
                 description=arguments.get("description"),
                 kind=arguments.get("kind"),
                 status=arguments.get("status", "open"),
-                points=arguments.get("points")
+                points=arguments.get("points"),
+                project_id=arguments.get("project_id"),
             )
             return [TextContent(
                 type="text",
